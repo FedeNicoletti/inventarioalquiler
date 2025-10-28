@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Inventario (Anexo I)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0 auto;
+            max-width: 900px;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 30px;
+        }
+        .room-section {
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .item-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .item-row input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .item-row button {
+            margin-left: 10px;
+            padding: 10px;
+            background-color: #e63946;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .add-btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .add-btn:hover {
+            background-color: #0056b3;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #2a9d8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background-color: #264653;
+        }
+        
+        /* Estilos para la vista de impresión/final */
+        #inventory-output {
+            display: none; /* Oculto por defecto */
+            padding: 30px;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+        #output-content ul {
+            list-style-type: disc;
+            padding-left: 40px;
+        }
+        #output-content li {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .print-controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .print-controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .print-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .edit-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="inventory-form" class="container">
+        <h1>Anexo I - Inventario de Inmueble</h1>
+        <p>Complete los items presentes en cada ambiente. Puede agregar tantos como necesite.</p>
+
+        <div class="room-section">
+            <h3>Comedor</h3>
+            <div id="comedor-items">
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (un) Sofá cama de 1 plaza, con cama carrito" value="1 (un) Sofá cama de 1 plaza, con cama carrito inferior de 1 plaza.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (un) Televisor 32 pulgadas" value="1 (un) Televisor 32 pulgadas, marca [Marca], con control remoto.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+                 <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (una) Mesa con 4 (cuatro) sillas" value="1 (una) Mesa tipo [Madera/vidrio] con 4 (cuatro) sillas.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+            </div>
+            <button type="button" class="add-btn" onclick="addItem('comedor-items', 'Ej: 1 (una) Estufa')">
+                + Agregar item al Comedor
+            </button>
+        </div>
+
+        <div class="room-section">
+            <h3>Habitación</h3>
+            <div id="habitacion-items">
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (una) Cama de dos plazas con colchón" value="1 (una) Cama de dos plazas con colchón.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 2 (dos) Mesas de luz" value="2 (dos) Mesas de luz.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (un) Televisor 32 pulgadas" value="1 (un) Televisor 32 pulgadas, marca [Marca], con control remoto.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+            </div>
+            <button type="button" class="add-btn" onclick="addItem('habitacion-items', 'Ej: 1 (un) Placard')">
+                + Agregar item a la Habitación
+            </button>
+        </div>
+
+        <div class="room-section">
+            <h3>Cocina</h3>
+            <div id="cocina-items">
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (una) Heladera marca [Marca]" value="1 (una) Heladera marca [Marca], en funcionamiento.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (una) Cocina de 4 hornallas" value="1 (una) Cocina de 4 hornallas y horno, marca [Marca], en funcionamiento.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (un) Calefón" value="1 (un) Calefón marca [Marca], en funcionamiento.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+            </div>
+            <button type="button" class="add-btn" onclick="addItem('cocina-items', 'Ej: 1 (una) Sartén')">
+                + Agregar item a la Cocina
+            </button>
+        </div>
+
+        <div class="room-section">
+            <h3>Baño</h3>
+            <div id="baño-items">
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: Juego de sanitarios y grifería" value="Juego de sanitarios y grifería en funcionamiento.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+                <div class="item-row">
+                    <input type="text" placeholder="Ej: 1 (un) Botiquín con espejo" value="1 (un) Botiquín con espejo.">
+                    <button type="button" onclick="removeItem(this)">X</button>
+                </div>
+            </div>
+            <button type="button" class="add-btn" onclick="addItem('baño-items', 'Ej: 1 (una) Cortina de baño')">
+                + Agregar item al Baño
+            </button>
+        </div>
+
+        <button type="button" class="submit-btn" onclick="generateInventory()">
+            Generar Anexo (Listo para Imprimir/Guardar)
+        </button>
+    </div>
+
+    <div id="inventory-output" class="container">
+        <h3>ANEXO I - INVENTARIO</h3>
+        <p><em>Se adjunta al Contrato de Locación Temporaria celebrado el [Día] de [Mes] de 2025, entre [Nombre Abuela] (LOCADORA) y [Nombre Veterinaria] (LOCATARIA), sobre el inmueble de calle [Dirección].</em></p>
+        <p>La <strong>LOCATARIA</strong> declara recibir en perfecto estado de uso y conservación los siguientes bienes:</p>
+        
+        <div id="output-content">
+            </div>
+
+        <p style="margin-top: 40px;">La <strong>LOCATARIA</strong> firma al pie en conformidad con el presente inventario.</p>
+
+        <div class="print-controls">
+            <button type="button" class="edit-btn" onclick="editInventory()">
+                &larr; Volver y Editar
+            </button>
+            <button type="button" class="print-btn" onclick="window.print()">
+                Imprimir o Guardar como PDF
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        // --- LÓGICA PARA AÑADIR ITEMS ---
+        function addItem(containerId, placeholderText = 'Descripción del item') {
+            const container = document.getElementById(containerId);
+            
+            const itemRow = document.createElement('div');
+            itemRow.className = 'item-row';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = placeholderText;
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.innerText = 'X';
+            removeBtn.onclick = function() {
+                removeItem(removeBtn);
+            };
+            
+            itemRow.appendChild(input);
+            itemRow.appendChild(removeBtn);
+            container.appendChild(itemRow);
+        }
+
+        // --- LÓGICA PARA QUITAR ITEMS ---
+        function removeItem(button) {
+            button.parentElement.remove();
+        }
+
+        // --- LÓGICA PARA GENERAR EL ANEXO ---
+        function generateInventory() {
+            // Ocultar el formulario
+            document.getElementById('inventory-form').style.display = 'none';
+            
+            // Mostrar la vista de impresión
+            const outputContainer = document.getElementById('inventory-output');
+            outputContainer.style.display = 'block';
+            
+            const outputContent = document.getElementById('output-content');
+            outputContent.innerHTML = ''; // Limpiar contenido anterior
+            
+            const sections = [
+                { id: 'comedor-items', title: 'Comedor' },
+                { id: 'habitacion-items', title: 'Habitación' },
+                { id: 'cocina-items', title: 'Cocina' },
+                { id: 'baño-items', title: 'Baño' }
+            ];
+            
+            sections.forEach(section => {
+                const itemContainer = document.getElementById(section.id);
+                const inputs = itemContainer.getElementsByTagName('input');
+                
+                if (inputs.length > 0) {
+                    const title = document.createElement('h4');
+                    title.innerText = section.title.toUpperCase();
+                    outputContent.appendChild(title);
+                    
+                    const list = document.createElement('ul');
+                    for (let input of inputs) {
+                        if (input.value.trim() !== '') {
+                            const listItem = document.createElement('li');
+                            listItem.innerText = input.value.trim();
+                            list.appendChild(listItem);
+                        }
+                    }
+                    outputContent.appendChild(list);
+                }
+            });
+        }
+
+        // --- LÓGICA PARA VOLVER A EDITAR ---
+        function editInventory() {
+            document.getElementById('inventory-output').style.display = 'none';
+            document.getElementById('inventory-form').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
